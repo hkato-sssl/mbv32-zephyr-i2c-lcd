@@ -62,12 +62,12 @@ static int writeb(uint8_t d)
 	return ret;
 }
 
-static int write_byte(uint8_t d, bool is_command)
+static int write_byte(uint8_t d, bool is_instruction)
 {
 	int ret;
 	uint8_t rs;
 
-	rs = is_command ? 0 : SIGNAL_RS;
+	rs = is_instruction ? 0 : SIGNAL_RS;
 
 	/* Write upper nibble */
 	ret = writeb((d & 0xf0) | rs);
@@ -81,11 +81,11 @@ static int write_byte(uint8_t d, bool is_command)
 	return ret;
 }
 
-static int write_command(uint8_t cmd)
+static int write_instruction(uint8_t inst)
 {
 	int ret;
 
-	ret = write_byte(cmd, true);
+	ret = write_byte(inst, true);
 
 	return ret;
 }
@@ -142,25 +142,25 @@ int lcd_init(void)
 	}
 
 	/* Function set */
-	ret = write_command(0x28);
+	ret = write_instruction(0x28);
 	if (ret < 0) {
 		return ret;
 	}
 
 	/* Display on */
-	ret = write_command(0x0e);
+	ret = write_instruction(0x0e);
 	if (ret < 0) {
 		return ret;
 	}
 
 	/* Display clear */
-	ret = write_command(0x01);
+	ret = write_instruction(0x01);
 	if (ret < 0) {
 		return ret;
 	}
 
 	/* Entry mode set */
-	ret = write_command(0x06);
+	ret = write_instruction(0x06);
 	if (ret < 0) {
 		return ret;
 	}
@@ -176,7 +176,7 @@ int lcd_clear(void)
 	lcd_y = 0;
 
 	/* Clear display */
-	ret = write_command(0x01);
+	ret = write_instruction(0x01);
 
 	return ret;
 }
@@ -190,7 +190,7 @@ static int update_cursor_position(void)
 
 	/* Set DDRAM address */
 	d = 0x80 | (offset[lcd_y] + lcd_x);
-	ret = write_command(d);
+	ret = write_instruction(d);
 
 	return ret;
 }
@@ -250,7 +250,7 @@ int lcd_display_cursor(bool fg)
 
 	/* Display on/off control */
 	d = fg ? 0x0e : 0x0c;
-	ret = write_command(d);
+	ret = write_instruction(d);
 
 	return ret;
 }

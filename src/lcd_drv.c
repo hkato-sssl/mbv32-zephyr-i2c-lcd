@@ -172,6 +172,9 @@ int lcd_clear(void)
 {
 	int ret;
 
+	lcd_x = 0;
+	lcd_y = 0;
+
 	/* Clear display */
 	ret = write_command(0x01);
 

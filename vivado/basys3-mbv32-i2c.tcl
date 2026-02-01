@@ -32,6 +32,7 @@ add_files -norecurse $PROJ_DIR/$PROJ_NAME.gen/sources_1/bd/$BD_DESIGN/hdl/${BD_D
 
 # add the constraint file
 add_files -fileset constrs_1 -norecurse $XDC_FILE
+import_files -fileset constrs_1 $XDC_FILE
 
 # generate the bitstream file
 update_compile_order -fileset sources_1
